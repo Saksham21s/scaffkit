@@ -4,7 +4,7 @@ import { execSync, type ExecSyncOptions } from "child_process";
 import { DocifyError, ErrorCode } from "../errors";
 import { ProgressBar } from "../progress/bar";
 
-const TEST_DIR = path.resolve(process.cwd(), "reactkit-test");
+const TEST_DIR = path.resolve(process.cwd(), "rkit-test");
 const isWin = process.platform === "win32";
 
 /** Return consistent execSync options for test steps */

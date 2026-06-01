@@ -52,13 +52,13 @@ npm run typecheck
 # Before committing
 npm run build
 npm test
-npx reactkit test
+npx rkit test
 ```
 
 ### Run the Self-Test
 
 ```bash
-npx reactkit test
+npx rkit test
 ```
 
 This generates a temporary project, verifies the file structure, checks TypeScript compilation, installs dependencies, and runs a production build.
@@ -181,7 +181,7 @@ git checkout -b fix/your-bug-fix
 - Update documentation where applicable
 - Run `npm run typecheck` — must pass with zero errors
 - Run `npm test` — all tests must pass
-- Run `npx reactkit test` — self-test must pass
+- Run `npx rkit test` — self-test must pass
 
 ### 4. Commit
 
@@ -230,7 +230,7 @@ timeline
            : Axios API client
            : Progress bar UI
     0.2.0 : UI component library
-           : reactkit add feature
+           : rkit add feature
            : Improved error handling
     0.3.0 : OpenAPI sync engine
            : Swagger code generation
@@ -244,7 +244,7 @@ timeline
 ### Current Development Focus
 
 1. **UI Component Library** — Building production-ready components: Button, Input, Modal, DataTable, Select, Tabs, Toast, Tooltip
-2. **Feature Addition** — The `reactkit add` command for adding features to existing projects
+2. **Feature Addition** — The `rkit add` command for adding features to existing projects
 3. **OpenAPI Sync** — Parsing Swagger specifications to generate API clients, types, and features
 4. **Error Boundaries** — Component-level error catching with fallback UIs
 

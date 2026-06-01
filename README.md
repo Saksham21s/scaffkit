@@ -38,10 +38,10 @@ graph LR
         A[Terminal]
     end
     
-    subgraph CLI["ReactKit CLI"]
-        B["reactkit init"]
-        C["reactkit add"]
-        D["reactkit sync"]
+    subgraph CLI["rkit CLI"]
+        B["rkit init"]
+        C["rkit add"]
+        D["rkit sync"]
     end
     
     subgraph Output["Generated Project"]
@@ -116,7 +116,7 @@ graph TD
 | **TypeScript strict mode** | Full type safety with path aliases configured for both tsconfig and Vite |
 | **Environment validation** | Runtime check for required environment variables |
 | **Dark mode ready** | All tokens and components support light and dark themes |
-| **Self-test command** | `reactkit test` validates the entire generation pipeline |
+| **Self-test command** | `rkit test` validates the entire generation pipeline |
 
 ---
 
@@ -124,10 +124,10 @@ graph TD
 
 ```bash
 # Generate a new project
-npx reactkit init
+npx rkit init
 
 # Follow the prompts, or skip them with --yes
-npx reactkit init --yes --output my-app
+npx rkit init --yes --output my-app
 
 # Navigate to the project and start developing
 cd my-app
@@ -139,7 +139,7 @@ The entire process completes in under 30 seconds. The generated project includes
 ### Skip Prompts for CI or Automation
 
 ```bash
-npx reactkit init --yes --output my-app
+npx rkit init --yes --output my-app
 ```
 
 The `--yes` flag uses sensible defaults: TypeScript, Tailwind CSS with custom tokens, Axios API client, TanStack Query, Zustand, and feature modules for auth, dashboard, and users.
@@ -147,7 +147,7 @@ The `--yes` flag uses sensible defaults: TypeScript, Tailwind CSS with custom to
 ### Run the Self-Test
 
 ```bash
-npx reactkit test
+npx rkit test
 ```
 
 This command generates a temporary project, verifies the file structure, runs TypeScript compilation checks, installs dependencies, and executes a production build — all automatically. It validates that the entire pipeline works end-to-end.
@@ -158,10 +158,10 @@ This command generates a temporary project, verifies the file structure, runs Ty
 
 | Command | Description | Status |
 |---|---|---|
-| `reactkit init` | Create a new React project with full production setup | Released |
-| `reactkit add <name>` | Add a feature module to an existing project | In Development |
-| `reactkit sync <spec>` | Parse OpenAPI/Swagger spec and generate features, types, and API client | In Development |
-| `reactkit test` | Run end-to-end self-test to verify the CLI toolchain | Released |
+| `rkit init` | Create a new React project with full production setup | Released |
+| `rkit add <name>` | Add a feature module to an existing project | In Development |
+| `rkit sync <spec>` | Parse OpenAPI/Swagger spec and generate features, types, and API client | In Development |
+| `rkit test` | Run end-to-end self-test to verify the CLI toolchain | Released |
 
 All commands support `--help` for detailed usage information.
 
@@ -218,7 +218,7 @@ The feature-based architecture keeps related code colocated — each feature has
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#3b82f6', 'secondaryColor': '#8b5cf6', 'tertiaryColor': '#06b6d4', 'lineColor': '#94a3b8'}}}%%
 graph TD
-    subgraph CLI["ReactKit CLI"]
+    subgraph CLI["rkit CLI"]
         CLI_Entry["index.ts<br/>Commander Entry"] --> InitCmd["init.ts<br/>Project Generator"]
         InitCmd --> Config["config/builder.ts<br/>Config Builder"]
         InitCmd --> Writer["writer/file-writer.ts<br/>Atomic File Writer"]
@@ -430,7 +430,7 @@ export const queryClient = new QueryClient({
 
 ## Configuration
 
-ReactKit uses a Zod-validated configuration schema. When you run `reactkit init`, the CLI builds a configuration object that controls every aspect of the generated project.
+ReactKit uses a Zod-validated configuration schema. When you run `rkit init`, the CLI builds a configuration object that controls every aspect of the generated project.
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#8b5cf6', 'secondaryColor': '#ec4899', 'lineColor': '#a78bfa'}}}%%
@@ -441,7 +441,7 @@ graph TD
     Config --> Modules["modules<br/>Auth, Routing, Testing, Docs"]
     Config --> Generated["generated<br/>Date, Tool Version"]
     
-    Project --> Init["reactkit init<br/>--output flag infers project name"]
+    Project --> Init["rkit init<br/>--output flag infers project name"]
     Structure --> Features["features: [auth, dashboard, users]<br/>Modify to add/remove features"]
     Tech --> PM["packageManager: npm | yarn | pnpm<br/>Controls dependency installation"]
     
@@ -545,7 +545,7 @@ gitGraph
 1. Fork the repository and create a feature branch
 2. Run `npm run typecheck` — must pass with zero errors
 3. Run `npm test` — all tests must pass
-4. Run `npx reactkit test` — self-test must pass
+4. Run `npx rkit test` — self-test must pass
 5. Submit a pull request with a clear description
 
 ---

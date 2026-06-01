@@ -1,5 +1,5 @@
 {
-  "name": "reactkit",
+  "name": "rkit",
   "version": "0.1.0",
   "description": "Production-grade React project scaffolding from a single CLI command. Generates complete applications with API client, design tokens, state management, routing, and feature modules.",
   "keywords": [
@@ -18,15 +18,15 @@
   "author": "ReactKit Contributors",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/reactkit/reactkit.git"
+    "url": "git+https://github.com/Saksham21s/reactkit.git"
   },
-  "homepage": "https://github.com/reactkit/reactkit#readme",
+  "homepage": "https://github.com/Saksham21s/reactkit#readme",
   "bugs": {
-    "url": "https://github.com/reactkit/reactkit/issues"
+    "url": "https://github.com/Saksham21s/reactkit/issues"
   },
   "type": "module",
   "bin": {
-    "reactkit": "./dist/index.js"
+    "rkit": "./dist/index.js"
   },
   "files": [
     "dist",
@@ -37,7 +37,7 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsup src/index.ts --format esm --clean --minify",
     "start": "node dist/index.js",
-    "reactkit": "node dist/index.js",
+    "rkit": "node dist/index.js",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
