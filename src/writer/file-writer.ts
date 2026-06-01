@@ -1,6 +1,6 @@
 import fs from "fs-extra";
 import path from "path";
-import { DocifyError, ErrorCode } from "../errors";
+import { ScaffkitError, ErrorCode } from "../errors";
 
 export interface FileToWrite {
   path: string;
@@ -17,7 +17,7 @@ export class FileWriter {
   async write(targetDir: string, files: FileToWrite[]): Promise<void> {
     if (files.length === 0) return;
 
-    const tempDir = path.join(targetDir, ".docify-temp");
+    const tempDir = path.join(targetDir, ".scaffkit-temp");
 
     try {
       await Promise.all(
@@ -36,7 +36,7 @@ export class FileWriter {
       }
     } catch (error) {
       await fs.remove(tempDir).catch(() => {});
-      throw new DocifyError(
+      throw new ScaffkitError(
         `Failed to write files: ${(error as Error).message}`,
         ErrorCode.FILE_WRITE_FAILED,
         "Check disk space and permissions",

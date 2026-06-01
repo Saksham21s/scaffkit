@@ -10,19 +10,19 @@ export enum ErrorCode {
   UNKNOWN_ERROR = "UNKNOWN_ERROR",
 }
 
-export class DocifyError extends Error {
+export class ScaffkitError extends Error {
   constructor(
     message: string,
     public readonly code: ErrorCode,
     public readonly hint?: string,
   ) {
     super(message);
-    this.name = "DocifyError";
+    this.name = "ScaffkitError";
   }
 }
 
 export function handleError(error: unknown): never {
-  if (error instanceof DocifyError) {
+  if (error instanceof ScaffkitError) {
     console.error(`\n${chalk.red("✗")} ${error.message}`);
     if (error.hint) {
       console.error(`  ${chalk.dim("💡")} ${error.hint}`);

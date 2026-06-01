@@ -27,7 +27,7 @@ export function buildClient(): string {
     "});",
     "",
     "// ── Token store ──",
-    'const TOKEN_KEY = "docify:auth";',
+    'const TOKEN_KEY = "scaffkit:auth";',
     "",
     "function getToken(): string | null {",
     "  try {",

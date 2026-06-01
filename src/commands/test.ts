@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs-extra";
 import { execSync, type ExecSyncOptions } from "child_process";
-import { DocifyError, ErrorCode } from "../errors";
+import { ScaffkitError, ErrorCode } from "../errors";
 import { ProgressBar } from "../progress/bar";
 
 const TEST_DIR = path.resolve(process.cwd(), "rkit-test");
@@ -18,12 +18,12 @@ function opts(timeout: number): ExecSyncOptions {
 }
 
 export async function testCommand(): Promise<void> {
-  console.log("\n  🧪 Docify Self-Test\n");
+  console.log("\n  Running scaffkit self-test\n");
 
   fs.removeSync(TEST_DIR);
 
   const steps = [
-    { name: "Running docify init", fn: () => runInit() },
+    { name: "Running scaffkit init", fn: () => runInit() },
     { name: "Verifying project structure", fn: () => verifyStructure() },
     { name: "Checking TypeScript compilation", fn: () => checkTypes() },
     { name: "Running production build", fn: () => runBuild() },
@@ -37,7 +37,7 @@ export async function testCommand(): Promise<void> {
       bar.complete();
     } catch (err) {
       bar.fail((err as Error).message);
-      throw new DocifyError("Self-test failed", ErrorCode.UNKNOWN_ERROR, "Check error above");
+      throw new ScaffkitError("Self-test failed", ErrorCode.UNKNOWN_ERROR, "Check logs above");
     }
   }
 

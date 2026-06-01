@@ -1,7 +1,7 @@
 import type { DocifyConfig, CLIOptions } from "./schema";
 import { DocifyConfigSchema } from "./schema";
 
-const DOCIFY_VERSION = "0.1.0";
+const SCAFFKIT_VERSION = "0.1.0";
 
 export class ConfigBuilder {
   getDefaults(): DocifyConfig {
@@ -32,7 +32,7 @@ export class ConfigBuilder {
       },
       generated: {
         date: new Date().toISOString(),
-        docifyVersion: DOCIFY_VERSION,
+        scaffkitVersion: SCAFFKIT_VERSION,
       },
     };
   }
@@ -50,7 +50,7 @@ export class ConfigBuilder {
       modules: { ...defaults.modules, ...answers.modules },
       generated: {
         date: new Date().toISOString(),
-        docifyVersion: DOCIFY_VERSION,
+        scaffkitVersion: SCAFFKIT_VERSION,
       },
     };
 

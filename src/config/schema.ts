@@ -37,7 +37,7 @@ export const DocifyConfigSchema = z.object({
   }),
   generated: z.object({
     date: z.string(),
-    docifyVersion: z.string(),
+    scaffkitVersion: z.string(),
   }),
 });
 

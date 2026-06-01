@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs-extra";
 import { execSync } from "child_process";
-import { DocifyError, ErrorCode } from "../errors";
+import { ScaffkitError, ErrorCode } from "../errors";
 import { ConfigBuilder } from "../config/builder";
 import { FileWriter } from "../writer/file-writer";
 import { ProgressBar } from "../progress/bar";
@@ -22,7 +22,7 @@ export async function initCommand(options: CLIOptions): Promise<void> {
   if (fs.existsSync(targetDir)) {
     const contents = fs.readdirSync(targetDir);
     if (contents.length > 0) {
-      throw new DocifyError(
+      throw new ScaffkitError(
         `Directory "${targetDir}" exists and is not empty`,
         ErrorCode.DIRECTORY_EXISTS,
         "Use --output with a new directory name",

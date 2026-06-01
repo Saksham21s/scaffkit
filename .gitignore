@@ -40,7 +40,7 @@ yarn-error.log*
 .turbo/
 
 # Temp
-.docify-temp/
+.scaffkit-temp/
 tmp/
 temp/
 .npmrc
