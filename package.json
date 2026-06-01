@@ -1,5 +1,5 @@
 {
-  "name": "rkit",
+  "name": "scaffkit",
   "version": "0.1.0",
   "description": "Production-grade React project scaffolding from a single CLI command. Generates complete applications with API client, design tokens, state management, routing, and feature modules.",
   "keywords": [
@@ -26,7 +26,7 @@
   },
   "type": "module",
   "bin": {
-    "rkit": "./dist/index.js"
+    "scaffkit": "./dist/index.js"
   },
   "files": [
     "dist",
@@ -37,7 +37,7 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsup src/index.ts --format esm --clean --minify",
     "start": "node dist/index.js",
-    "rkit": "node dist/index.js",
+    "scaffkit": "node dist/index.js",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",

@@ -8,7 +8,7 @@ import { handleError } from "./errors";
 const program = new Command();
 
 program
-  .name("rkit")
+  .name("scaffkit")
   .description("Generate production-grade React projects from a single command")
   .version("0.1.0");
 
