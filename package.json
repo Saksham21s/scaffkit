@@ -1,6 +1,6 @@
 {
   "name": "scaffkit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Production-grade React project scaffolding from a single CLI command. Generates complete applications with API client, design tokens, state management, routing, and feature modules.",
   "keywords": [
     "react",
