@@ -4,15 +4,15 @@ import { execSync, type ExecSyncOptions } from "child_process";
 import { ScaffkitError, ErrorCode } from "../errors";
 import { ProgressBar } from "../progress/bar";
 
-const TEST_DIR = path.resolve(process.cwd(), "rkit-test");
-const isWin = process.platform === "win32";
+const TEST_DIR = path.resolve(process.cwd(), "scaffkit-test");
 
-/** Return consistent execSync options for test steps */
 function opts(timeout: number): ExecSyncOptions {
   return {
     stdio: "pipe",
     timeout,
-    shell: isWin ? process.env.COMSPEC || "cmd.exe" : "/bin/bash",
+    shell: process.platform === "win32"
+      ? process.env.COMSPEC || "cmd.exe"
+      : "/bin/bash",
     env: { ...process.env, NODE_ENV: "test" },
   };
 }
@@ -23,7 +23,7 @@ export async function testCommand(): Promise<void> {
   fs.removeSync(TEST_DIR);
 
   const steps = [
-    { name: "Running scaffkit init", fn: () => runInit() },
+    { name: "Scaffolding project", fn: () => runInit() },
     { name: "Verifying project structure", fn: () => verifyStructure() },
     { name: "Checking TypeScript compilation", fn: () => checkTypes() },
     { name: "Running production build", fn: () => runBuild() },
@@ -37,12 +37,16 @@ export async function testCommand(): Promise<void> {
       bar.complete();
     } catch (err) {
       bar.fail((err as Error).message);
-      throw new ScaffkitError("Self-test failed", ErrorCode.UNKNOWN_ERROR, "Check logs above");
+      throw new ScaffkitError(
+        "Self-test failed",
+        ErrorCode.UNKNOWN_ERROR,
+        "Check logs above for details",
+      );
     }
   }
 
   fs.removeSync(TEST_DIR);
-  console.log("\n  ✅ All tests passed!\n");
+  console.log("\n  ✅ Self-test passed!\n");
 }
 
 function runInit(): void {
@@ -59,24 +63,30 @@ function verifyStructure(): void {
     "package.json",
     "tsconfig.json",
     "vite.config.ts",
-    "tailwind.config.ts",
     "index.html",
     "src/main.tsx",
     "src/App.tsx",
     "src/styles/tokens.css",
     "src/styles/base.css",
     "src/styles/index.css",
-    "src/shared/lib/cn.ts",
-    "src/shared/lib/queryClient.ts",
-    "src/shared/core/api/client.ts",
-    "src/shared/core/api/routes.ts",
-    "src/shared/core/api/index.ts",
+    "src/components/ui/Button.tsx",
+    "src/components/ui/Input.tsx",
+    "src/components/layout/AppLayout.tsx",
+    "src/lib/api/client.ts",
+    "src/lib/api/routes.ts",
+    "src/lib/api/index.ts",
+    "src/lib/cn.ts",
+    "src/lib/store.ts",
+    "src/lib/queryClient.ts",
+    "src/components/Providers.tsx",
     ".env.example",
   ];
 
-  const missing = required.filter((f) => !fs.existsSync(path.join(TEST_DIR, f)));
+  const missing = required.filter(
+    (f) => !fs.existsSync(path.join(TEST_DIR, f)),
+  );
   if (missing.length > 0) {
-    throw new Error(`Missing: ${missing.join(", ")}`);
+    throw new Error(`Missing required files:\n  - ${missing.join("\n  - ")}`);
   }
 }
 

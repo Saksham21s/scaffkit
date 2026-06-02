@@ -1,0 +1,358 @@
+import type { Generator, GeneratedFile } from "../core/engine";
+import type { PromptAnswers } from "../prompts";
+
+/**
+ * Generates UI components, layout components, and common shared components.
+ * Produces clean, modern component structure without unnecessary nesting.
+ */
+export class UIGenerator implements Generator {
+  name = "UI Components";
+  priority = 300;
+
+  async generate(answers: PromptAnswers): Promise<GeneratedFile[]> {
+    const extx = answers.tech.typescript ? "tsx" : "jsx";
+    const ext = answers.tech.typescript ? "ts" : "js";
+
+    return [
+      // ── Layout components ──
+      {
+        path: `src/components/layout/Sidebar.${extx}`,
+        content: this.buildSidebar(),
+      },
+      {
+        path: `src/components/layout/Header.${extx}`,
+        content: this.buildHeader(),
+      },
+      {
+        path: `src/components/layout/AppLayout.${extx}`,
+        content: this.buildAppLayout(),
+      },
+      // ── Common / shared components ──
+      {
+        path: `src/components/ui/Button.${extx}`,
+        content: this.buildButton(),
+      },
+      {
+        path: `src/components/ui/Input.${extx}`,
+        content: this.buildInput(),
+      },
+      {
+        path: `src/components/ui/Modal.${extx}`,
+        content: this.buildModal(),
+      },
+      {
+        path: `src/components/ui/index.${ext}`,
+        content: this.buildUiIndex(),
+      },
+      // ── Empty state ──
+      {
+        path: `src/components/EmptyState.${extx}`,
+        content: this.buildEmptyState(),
+      },
+    ];
+  }
+
+  private buildSidebar(): string {
+    return [
+      `import { NavLink } from "react-router-dom";`,
+      `import { LayoutDashboard, Users, Settings, LogOut } from "lucide-react";`,
+      `import { cn } from "@/lib/cn";`,
+      "",
+      "const navItems = [",
+      `  { to: "/", label: "Dashboard", icon: LayoutDashboard },`,
+      `  { to: "/users", label: "Users", icon: Users },`,
+      `  { to: "/settings", label: "Settings", icon: Settings },`,
+      "];",
+      "",
+      "export function Sidebar() {",
+      "  return (",
+      `    <aside className="flex h-full w-64 flex-col border-r bg-surface-subtle px-4 py-6">`,
+      `      <div className="mb-8 px-3">`,
+      `        <h2 className="text-lg font-semibold text">App</h2>`,
+      "      </div>",
+      `      <nav className="flex flex-1 flex-col gap-1">`,
+      "        {navItems.map((item) => (",
+      "          <NavLink",
+      "            key={item.to}",
+      "            to={item.to}",
+      `            className={({ isActive }) =>`,
+      "              cn(",
+      `                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",`,
+      `                "text-subtle hover:bg-surface-muted hover:text",`,
+      `                isActive && "bg-primary-subtle text-primary",`,
+      "              )",
+      "            }",
+      "          >",
+      `            <item.icon className="h-4 w-4" />`,
+      "            {item.label}",
+      "          </NavLink>",
+      "        ))}",
+      "      </nav>",
+      `      <div className="border-t pt-4">`,
+      `        <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-subtle transition-colors hover:bg-surface-muted hover:text">`,
+      `          <LogOut className="h-4 w-4" />`,
+      "          Sign Out",
+      "        </button>",
+      "      </div>",
+      `    </aside>`,
+      "  );",
+      "}",
+    ].join("\n");
+  }
+
+  private buildHeader(): string {
+    return [
+      `import { Menu, Search, Bell } from "lucide-react";`,
+      "",
+      "interface HeaderProps {",
+      "  onMenuClick?: () => void;",
+      "}",
+      "",
+      "export function Header({ onMenuClick }: HeaderProps) {",
+      "  return (",
+      `    <header className="flex h-16 items-center justify-between border-b bg-surface px-6">`,
+      "      <div className=\"flex items-center gap-4\">",
+      "        <button",
+      "          onClick={onMenuClick}",
+      `          className="rounded-lg p-2 text-subtle transition-colors hover:bg-surface-muted hover:text lg:hidden"`,
+      "        >",
+      `          <Menu className="h-5 w-5" />`,
+      "        </button>",
+      `        <div className="relative hidden sm:block">`,
+      `          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />`,
+      "          <input",
+      `            type="text"`,
+      `            placeholder="Search..."`,
+      `            className="h-9 w-64 rounded-lg border bg-surface-subtle pl-10 pr-4 text-sm text outline-none transition-colors placeholder:text-muted focus:border-primary focus:ring-1 focus:ring-primary"`,
+      "          />",
+      "        </div>",
+      "      </div>",
+      "      <div className=\"flex items-center gap-3\">",
+      `        <button className="relative rounded-lg p-2 text-subtle transition-colors hover:bg-surface-muted hover:text">`,
+      `          <Bell className="h-5 w-5" />`,
+      `          <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-error" />`,
+      "        </button>",
+      `        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-medium text-white">`,
+      "          U",
+      "        </div>",
+      "      </div>",
+      `    </header>`,
+      "  );",
+      "}",
+    ].join("\n");
+  }
+
+  private buildAppLayout(): string {
+    return [
+      `import { useState } from "react";`,
+      `import { Outlet } from "react-router-dom";`,
+      `import { Sidebar } from "./Sidebar";`,
+      `import { Header } from "./Header";`,
+      `import { cn } from "@/lib/cn";`,
+      "",
+      "export function AppLayout() {",
+      "  const [sidebarOpen, setSidebarOpen] = useState(false);",
+      "",
+      "  return (",
+      `    <div className="flex h-screen overflow-hidden bg-surface">`,
+      "      {/* Mobile overlay */}",
+      "      {sidebarOpen && (",
+      `        <div className="fixed inset-0 z-40 bg-black/50 lg:hidden" onClick={() => setSidebarOpen(false)} />`,
+      "      )}",
+      "",
+      "      {/* Sidebar */}",
+      `      <div className={cn("fixed inset-y-0 left-0 z-50 hidden lg:relative lg:flex")}>`,
+      "        <Sidebar />",
+      "      </div>",
+      "",
+      `      <div className={cn("fixed inset-y-0 left-0 z-50 flex lg:hidden", sidebarOpen ? "flex" : "hidden")}>`,
+      "        <Sidebar />",
+      "      </div>",
+      "",
+      "      {/* Main content */}",
+      `      <div className="flex flex-1 flex-col overflow-hidden">`,
+      `        <Header onMenuClick={() => setSidebarOpen(true)} />`,
+      `        <main className="flex-1 overflow-y-auto p-6">`,
+      "          <Outlet />",
+      "        </main>",
+      "      </div>",
+      `    </div>`,
+      "  );",
+      "}",
+    ].join("\n");
+  }
+
+  private buildButton(): string {
+    return [
+      `import { forwardRef, type ButtonHTMLAttributes } from "react";`,
+      `import { cn } from "@/lib/cn";`,
+      "",
+      `type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";`,
+      `type ButtonSize = "sm" | "md" | "lg";`,
+      "",
+      "interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {",
+      "  variant?: ButtonVariant;",
+      "  size?: ButtonSize;",
+      "  isLoading?: boolean;",
+      "}",
+      "",
+      "const variantStyles: Record<ButtonVariant, string> = {",
+      `  primary: "bg-primary text-white hover:bg-primary-hover active:bg-primary-active",`,
+      `  secondary: "border bg-surface text hover:bg-surface-subtle active:bg-surface-muted",`,
+      `  ghost: "text-subtle hover:bg-surface-muted hover:text",`,
+      `  danger: "bg-error text-white hover:opacity-90",`,
+      "};",
+      "",
+      "const sizeStyles: Record<ButtonSize, string> = {",
+      `  sm: "h-8 px-3 text-xs",`,
+      `  md: "h-10 px-4 text-sm",`,
+      `  lg: "h-12 px-6 text-base",`,
+      "};",
+      "",
+      "export const Button = forwardRef<HTMLButtonElement, ButtonProps>(",
+      `  ({ className, variant = "primary", size = "md", isLoading, disabled, children, ...props }, ref) => (`,
+      "    <button",
+      "      ref={ref}",
+      "      disabled={disabled || isLoading}",
+      "      className={cn(",
+      `        "inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-all",`,
+      `        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",`,
+      `        "disabled:cursor-not-allowed disabled:opacity-50",`,
+      "        variantStyles[variant],",
+      "        sizeStyles[size],",
+      "        className,",
+      "      )}",
+      "      {...props}",
+      "    >",
+      "      {isLoading && (",
+      `        <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24">`,
+      `          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />`,
+      `          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />`,
+      "        </svg>",
+      "      )}",
+      "      {children}",
+      "    </button>",
+      "  ),",
+      ");",
+      "",
+      `Button.displayName = "Button";`,
+    ].join("\n");
+  }
+
+  private buildInput(): string {
+    return [
+      `import { forwardRef, type InputHTMLAttributes } from "react";`,
+      `import { cn } from "@/lib/cn";`,
+      "",
+      "interface InputProps extends InputHTMLAttributes<HTMLInputElement> {",
+      "  label?: string;",
+      "  error?: string;",
+      "}",
+      "",
+      "export const Input = forwardRef<HTMLInputElement, InputProps>(",
+      `  ({ className, label, error, id, ...props }, ref) => (`,
+      `    <div className="flex flex-col gap-1.5">`,
+      "      {label && (",
+      `        <label htmlFor={id} className="text-sm font-medium text">`,
+      "          {label}",
+      "        </label>",
+      "      )}",
+      "      <input",
+      "        ref={ref}",
+      "        id={id}",
+      "        className={cn(",
+      `          "h-10 rounded-lg border bg-surface px-3 text-sm text outline-none transition-all",`,
+      `          "placeholder:text-muted",`,
+      `          "focus:border-primary focus:ring-1 focus:ring-primary",`,
+      `          error && "border-error focus:border-error focus:ring-error",`,
+      "          className,",
+      "        )}",
+      "        {...props}",
+      "      />",
+      `      {error && <p className="text-xs text-error">{error}</p>}`,
+      "    </div>",
+      "  ),",
+      ");",
+      "",
+      `Input.displayName = "Input";`,
+    ].join("\n");
+  }
+
+  private buildModal(): string {
+    return [
+      `import { useEffect, type ReactNode } from "react";`,
+      `import { X } from "lucide-react";`,
+      `import { cn } from "@/lib/cn";`,
+      "",
+      "interface ModalProps {",
+      "  open: boolean;",
+      "  onClose: () => void;",
+      "  title?: string;",
+      "  children: ReactNode;",
+      "  className?: string;",
+      "}",
+      "",
+      "export function Modal({ open, onClose, title, children, className }: ModalProps) {",
+      "  useEffect(() => {",
+      "    if (open) {",
+      `      document.body.style.overflow = "hidden";`,
+      "    } else {",
+      `      document.body.style.overflow = "";`,
+      "    }",
+      `    return () => { document.body.style.overflow = ""; };`,
+      "  }, [open]);",
+      "",
+      "  if (!open) return null;",
+      "",
+      "  return (",
+      `    <div className="fixed inset-0 z-50 flex items-center justify-center">`,
+      `      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />`,
+      `      <div className={cn("relative z-10 w-full max-w-md rounded-xl border bg-surface p-6 shadow-xl", className)}>`,
+      `        <div className="flex items-center justify-between mb-4">`,
+      `          {title && <h2 className="text-lg font-semibold">{title}</h2>}`,
+      `          <button onClick={onClose} className="rounded-lg p-1 text-subtle hover:bg-surface-muted hover:text transition-colors">`,
+      `            <X className="h-5 w-5" />`,
+      "          </button>",
+      "        </div>",
+      "        {children}",
+      "      </div>",
+      `    </div>`,
+      "  );",
+      "}",
+    ].join("\n");
+  }
+
+  private buildUiIndex(): string {
+    return [
+      'export { Button } from "./Button";',
+      'export { Input } from "./Input";',
+      'export { Modal } from "./Modal";',
+      'export type { ButtonProps } from "./Button";',
+      'export type { InputProps } from "./Input";',
+      'export type { ModalProps } from "./Modal";',
+    ].join("\n");
+  }
+
+  private buildEmptyState(): string {
+    return [
+      `import { Inbox } from "lucide-react";`,
+      "",
+      "interface EmptyStateProps {",
+      "  title?: string;",
+      "  description?: string;",
+      "}",
+      "",
+      `export function EmptyState({ title = "No data", description = "Nothing to show here yet." }: EmptyStateProps) {`,
+      "  return (",
+      `    <div className="flex flex-col items-center justify-center py-16 text-center">`,
+      `      <div className="mb-4 rounded-full bg-surface-muted p-4">`,
+      `        <Inbox className="h-8 w-8 text-muted" />`,
+      "      </div>",
+      `      <h3 className="text-lg font-semibold text">{title}</h3>`,
+      `      <p className="mt-1 text-sm text-subtle">{description}</p>`,
+      "    </div>",
+      "  );",
+      "}",
+    ].join("\n");
+  }
+}

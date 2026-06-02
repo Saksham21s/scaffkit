@@ -22,15 +22,21 @@ export class ScaffkitError extends Error {
 }
 
 export function handleError(error: unknown): never {
+  const dim = chalk.dim.hex("#475569");
+  const subtle = chalk.hex("#94a3b8");
+
   if (error instanceof ScaffkitError) {
-    console.error(`\n${chalk.red("✗")} ${error.message}`);
+    console.error(`\n  ${chalk.red.bold("✘")}  ${chalk.bold(error.message)}`);
+    console.error(`  ${dim("╰─")}  ${subtle(error.code)}`);
     if (error.hint) {
-      console.error(`  ${chalk.dim("💡")} ${error.hint}`);
+      console.error(`     ${chalk.hex("#f59e0b")("▶")}  ${subtle(error.hint)}`);
     }
+    console.error();
     process.exit(1);
   }
 
-  console.error(chalk.red("\n✗ Unexpected error:"));
-  console.error(chalk.dim(error));
+  console.error(`\n  ${chalk.red.bold("✘")}  ${chalk.bold("Unexpected error")}`);
+  console.error(`  ${dim("╰─")}  ${subtle(String(error))}`);
+  console.error();
   process.exit(1);
 }

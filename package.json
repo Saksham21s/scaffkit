@@ -18,11 +18,11 @@
   "author": "scaffkit Contributors",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Saksham21s/reactkit.git"
+    "url": "git+https://github.com/Saksham21s/scaffkit.git"
   },
-  "homepage": "https://github.com/Saksham21s/reactkit#readme",
+  "homepage": "https://github.com/Saksham21s/scaffkit#readme",
   "bugs": {
-    "url": "https://github.com/Saksham21s/reactkit/issues"
+    "url": "https://github.com/Saksham21s/scaffkit/issues"
   },
   "type": "module",
   "bin": {
@@ -34,10 +34,10 @@
     "LICENSE"
   ],
   "scripts": {
+    "start": "tsx src/index.ts",
     "dev": "tsx watch src/index.ts",
     "build": "tsup src/index.ts --format esm --clean --minify",
-    "start": "node dist/index.js",
-    "scaffkit": "node dist/index.js",
+    "preview": "npm run build && node dist/index.js",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
